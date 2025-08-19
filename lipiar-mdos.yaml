@@ -14,6 +14,7 @@ spec:
             value: clean-mdos
           - name: namespace
             value: openshift-pipelines
+        resolver: cluster
       workspaces:
         - name: maven-repo
           workspace: mdos
