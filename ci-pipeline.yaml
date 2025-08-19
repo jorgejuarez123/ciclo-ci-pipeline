@@ -1,0 +1,232 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: ci-pipeline
+  namespace: mh-dev-dinafi-usi-cicloci
+spec:
+  params:
+    - description: URL gerrit
+      name: git-source-url
+      type: string
+    - description: URL Imagen
+      name: remote-image-url
+      type: string
+    - description: Referencia gerrit
+      name: ref
+      type: string
+    - description: id de cambio
+      name: change-id
+      type: string
+    - description: Branch gerrit
+      name: revision
+      type: string
+    - description: Nexus host
+      name: nexus-repository
+      type: string
+    - description: Tag
+      name: hashtag
+      type: string
+    - description: Nombre proyecto
+      name: gerrit-repository
+      type: string
+  tasks:
+    - name: git-clone
+      params:
+        - name: CRT_FILENAME
+          value: ca-bundle.crt
+        - name: HTTP_PROXY
+          value: ''
+        - name: HTTPS_PROXY
+          value: ''
+        - name: NO_PROXY
+          value: ''
+        - name: SUBDIRECTORY
+          value: ''
+        - name: USER_HOME
+          value: /home/git
+        - name: DELETE_EXISTING
+          value: 'true'
+        - name: VERBOSE
+          value: 'false'
+        - name: SSL_VERIFY
+          value: 'false'
+        - name: URL
+          value: $(params.git-source-url)
+        - name: REVISION
+          value: $(params.revision)
+        - name: REFSPEC
+          value: $(params.ref)
+        - name: SUBMODULES
+          value: 'true'
+        - name: DEPTH
+          value: '0'
+        - name: SPARSE_CHECKOUT_DIRECTORIES
+          value: ''
+        - name: sslVerify
+          value: 'false'
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      workspaces:
+        - name: output
+          workspace: app-source
+        - name: ssh-directory
+          workspace: git-ssh-credentials
+    - name: build-artifact
+      params:
+        - name: GOALS
+          value:
+            - clean
+            - '-DskipTests'
+            - package
+            - '-Dquarkus.native.container-build=true'
+        - name: MAVEN_MIRROR_URL
+          value: ''
+        - name: SUBDIRECTORY
+          value: .
+      runAfter:
+        - git-clone
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: maven-mdos
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      workspaces:
+        - name: source
+          workspace: app-source
+        - name: maven_settings
+          workspace: maven-settings
+        - name: maven-repo
+          workspace: maven-repo
+    - name: create-version-metadata
+      params:
+        - name: change-id
+          value: $(params.change-id)
+        - name: hashtag
+          value: $(params.hashtag)
+        - name: url-quay
+          value: $(params.remote-image-url)
+        - name: gerrit-repository
+          value: $(params.gerrit-repository)
+      runAfter:
+        - build-artifact
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: create-version-metadata
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+    - name: maven-upload-artifact
+      params:
+        - name: JAR_FILE
+          value: target/quarkus-api-example-1.0.0-SNAPSHOT.jar
+        - name: POM_FILE
+          value: ./pom.xml
+        - name: REPOSITORY_URL
+          value: $(params.nexus-repository)
+        - name: REPOSITORY_ID
+          value: nexus
+        - name: version
+          value: $(tasks.create-version-metadata.results.version-key)
+      runAfter:
+        - create-version-metadata
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: maven-upload-artifact
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      workspaces:
+        - name: source
+          workspace: app-source
+        - name: maven-nexus
+          workspace: maven-nexus
+    - name: build-image
+      params:
+        - name: IMAGE
+          value: $(tasks.create-version-metadata.results.full-url-quay)
+        - name: DOCKERFILE
+          value: ./Dockerfile
+        - name: BUILD_ARGS
+          value: []
+        - name: CONTEXT
+          value: .
+        - name: STORAGE_DRIVER
+          value: vfs
+        - name: FORMAT
+          value: oci
+        - name: BUILD_EXTRA_ARGS
+          value: ''
+        - name: PUSH_EXTRA_ARGS
+          value: ''
+        - name: SKIP_PUSH
+          value: 'false'
+        - name: TLS_VERIFY
+          value: 'false'
+        - name: VERBOSE
+          value: 'false'
+      runAfter:
+        - maven-upload-artifact
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: buildah
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      workspaces:
+        - name: source
+          workspace: app-source
+    - name: update-image-tag
+      params:
+        - name: new-image
+          value: $(tasks.create-version-metadata.results.version-key)
+        - name: image-quay-url
+          value: $(params.remote-image-url)
+        - name: branch
+          value: dev
+        - name: gerrit-repository
+          value: $(params.gerrit-repository)
+        - name: git-source-url
+          value: $(params.git-source-url)
+      runAfter:
+        - build-image
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: update-image-tag
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      workspaces:
+        - name: source
+          workspace: app-source
+        - name: git-ssh-auth
+          workspace: git-ssh-credentials
+  workspaces:
+    - name: app-source
+    - name: maven-settings
+    - name: maven-nexus
+    - name: maven-repo
+    - name: git-ssh-credentials
+
