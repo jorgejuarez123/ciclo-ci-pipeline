@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  creationTimestamp: '2025-08-14T15:16:56Z'
+  generation: 1
+  managedFields:
+    - apiVersion: tekton.dev/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:spec:
+          .: {}
+          f:finally: {}
+          f:params: {}
+          f:tasks: {}
+          f:workspaces: {}
+      manager: Mozilla
+      operation: Update
+      time: '2025-08-14T15:16:56Z'
+  name: limpiar-mdos
+  namespace: cop-pipeline
+  resourceVersion: '67081826'
+  uid: c5226541-49e7-466a-b1ba-7eb0eb89c4ae
+spec:
+  tasks:
+    - name: clean-mdos
+      taskRef:
+        kind: Task
+        name: clean-mdos
+      workspaces:
+        - name: maven-repo
+          workspace: mdos
+  workspaces:
+    - name: mdos
+      optional: false
+  params: []
+  finally: []
+
