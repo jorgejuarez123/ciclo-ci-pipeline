@@ -1,0 +1,14 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: gerrit-code-review-triggerbinding
+spec:
+  params:
+    - name: git-source-url
+      value: 'ssh://tekton.micro@almsrv2.mh.gob.sv:29419/$(body.change.project).git'
+    - name: ref
+      value: $(body.patchSet.ref)
+    - name: revision
+      value: $(body.patchSet.revision)
+    - name: change-id
+      value: $(body.change.id)
