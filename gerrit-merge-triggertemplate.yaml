@@ -1,0 +1,58 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: gerrit-merge-triggertemplate
+spec:
+  params:
+    - name: git-source-url
+    - name: remote-image-url
+    - name: ref
+    - name: change-id
+    - name: revision
+    - name: hashtag
+    - name: gerrit-repository
+    - name: git-config-url
+    - name: nexus-repository
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: ci-pipelinerun-
+      spec:
+        params:
+          - name: git-source-url
+            value: $(tt.params.git-source-url)
+          - name: remote-image-url
+            value: $(tt.params.remote-image-url)
+          - name: ref
+            value: $(tt.params.ref)
+          - name: change-id
+            value: $(tt.params.change-id)
+          - name: revision
+            value: $(tt.params.revision)
+          - name: hashtag
+            value: $(tt.params.hashtag)
+          - name: gerrit-repository
+            value: $(tt.params.gerrit-repository)
+          - name: nexus-repository
+            value: $(tt.params.nexus-repository)
+        pipelineRef:
+          name: ci-pipeline
+        serviceAccountName: pipeline
+        workspaces:
+          - name: app-source
+            persistentVolumeClaim:
+              claimName: pvc-source
+          - configMap:
+              name: maven-settings
+            name: maven-settings
+          - name: maven-nexus
+            secret:
+              secretName: maven-settings
+          - name: maven-repo
+            persistentVolumeClaim:
+              claimName: maven-mdos
+          - name: git-ssh-credentials
+            secret:
+              secretName: git-ssh-credentials
+
