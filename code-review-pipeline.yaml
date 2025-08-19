@@ -1,0 +1,203 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: code-review-pipeline
+  namespace: mh-dev-dinafi-usi-cicloci
+spec:
+  finally:
+    - name: validate-pipeline
+      params:
+        - name: git-clone-status
+          value: $(tasks.git-clone.status)
+        - name: validate-branch-gerrit-status
+          value: $(tasks.validate-branch-gerrit.status)
+        - name: dependency-clean-test-status
+          value: $(tasks.dependency-clean-test.status)
+        - name: sonarqube-scanner-status
+          value: $(tasks.sonarqube-scanner.status)
+        - name: change-id
+          value: $(params.change-id)
+        - name: revision-id
+          value: $(params.revision)
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: validate-pipeline
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+  params:
+    - description: URL gerrit
+      name: git-source-url
+      type: string
+    - description: URL Imagen
+      name: remote-image-url
+      type: string
+    - description: Referencia gerrit
+      name: ref
+      type: string
+    - description: id de cambio
+      name: change-id
+      type: string
+    - description: Branch gerrit
+      name: revision
+      type: string
+    - default: http://alcm.mh.gob.sv/e/sonar
+      description: Sonar host
+      name: SONAR_HOST_URL
+      type: string
+    - default: src/main/java
+      description: Sonar source
+      name: SONAR_PROJECT_SOURCES
+      type: string
+    - default: .
+      description: Sonar Binaries
+      name: SONAR_PROJECT_BINARIES
+      type: string
+  tasks:
+    - name: git-clone
+      params:
+        - name: CRT_FILENAME
+          value: ca-bundle.crt
+        - name: HTTP_PROXY
+          value: ''
+        - name: HTTPS_PROXY
+          value: ''
+        - name: NO_PROXY
+          value: ''
+        - name: SUBDIRECTORY
+          value: ''
+        - name: USER_HOME
+          value: /home/git
+        - name: DELETE_EXISTING
+          value: 'true'
+        - name: VERBOSE
+          value: 'false'
+        - name: SSL_VERIFY
+          value: 'false'
+        - name: URL
+          value: $(params.git-source-url)
+        - name: REVISION
+          value: $(params.revision)
+        - name: REFSPEC
+          value: $(params.ref)
+        - name: SUBMODULES
+          value: 'true'
+        - name: DEPTH
+          value: '0'
+        - name: SPARSE_CHECKOUT_DIRECTORIES
+          value: ''
+        - name: sslVerify
+          value: 'false'
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      workspaces:
+        - name: output
+          workspace: app-source
+        - name: ssh-directory
+          workspace: git-ssh-credentials
+    - name: validate-branch-gerrit
+      params:
+        - name: revision-branch
+          value: $(params.revision)
+        - name: main-branch
+          value: dev
+      runAfter:
+        - git-clone
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: validate-branch-gerrit
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      workspaces:
+        - name: source
+          workspace: app-source
+        - name: git-auth
+          workspace: git-ssh-credentials
+        - name: sonar-secret
+          workspace: sonar-secret
+    - name: dependency-clean-test
+      params:
+        - name: GOALS
+          value:
+            - dependency:analyze
+            - clean
+            - test
+        - name: MAVEN_MIRROR_URL
+          value: ''
+        - name: SUBDIRECTORY
+          value: .
+      runAfter:
+        - validate-branch-gerrit
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: maven-mdos
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      workspaces:
+        - name: maven_settings
+          workspace: maven-settings
+        - name: source
+          workspace: app-source
+        - name: maven-repo
+          workspace: maven-repo
+    - name: sonarqube-scanner
+      params:
+        - name: SONAR_HOST_URL
+          value: $(params.SONAR_HOST_URL)
+        - name: SONAR_PROJECT_KEY
+          value: $(tasks.validate-branch-gerrit.results.SONAR_PROJECT_KEY)
+        - name: PROJECT_VERSION
+          value: '1.0'
+        - name: SOURCE_TO_SCAN
+          value: $(params.SONAR_PROJECT_SOURCES)
+        - name: SONAR_ORGANIZATION
+          value: ''
+        - name: SONAR_SCANNER_IMAGE
+          value: docker.io/sonarsource/sonar-scanner-cli:latest
+        - name: SONAR_LOGIN_KEY
+          value: ''
+        - name: SONAR_PASSWORD_KEY
+          value: ''
+        - name: SONAR_TOKEN
+          value: $(tasks.validate-branch-gerrit.results.SONAR_PROJECT_TOKEN)
+        - name: SONAR_PROJECT_BINARIES
+          value: $(params.SONAR_PROJECT_BINARIES)
+      runAfter:
+        - dependency-clean-test
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: sonarqube-scanner
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      workspaces:
+        - name: source
+          workspace: app-source
+  workspaces:
+    - name: app-source
+    - name: maven-settings
+    - name: sonar-secret
+    - name: maven-repo
+    - name: git-ssh-credentials
+
