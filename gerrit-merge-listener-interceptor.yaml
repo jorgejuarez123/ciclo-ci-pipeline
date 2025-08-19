@@ -1,0 +1,29 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: gerrit-merge-listener-interceptor
+spec:
+  namespaceSelector: {}
+  resources: {}
+  serviceAccountName: pipeline
+  triggers:
+    - bindings:
+        - kind: TriggerBinding
+          ref: gerrit-merge-triggerbinding
+      interceptors:
+        - params:
+            - name: filter
+              value: |
+                body.refName == 'refs/heads/dev' && body.project.name == 'dinafi-openshift/quarkus-api-demo'
+            - name: overlays
+              value:
+                - expression: 'has(body.change.hashtags) && size(body.change.hashtags) > 0 ? body.change.hashtags[0] : '''''
+                  key: hashtag
+          ref:
+            kind: ClusterInterceptor
+            name: cel
+      name: gerrit-merge-trigger-quarkus-api-demo
+      template:
+        ref: gerrit-merge-triggertemplate
+
+

@@ -1,0 +1,37 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: gerrit-code-review-listener-interceptor
+spec:
+  namespaceSelector: {}
+  resources: {}
+  serviceAccountName: pipeline
+  triggers:
+    - bindings:
+        - kind: TriggerBinding
+          ref: gerrit-code-review-triggerbinding
+      interceptors:
+        - params:
+            - name: filter
+              value: |
+                body.refName == 'refs/heads/dev' && body.project.name == 'dinafi-openshift/quarkus-api-demo'
+          ref:
+            kind: ClusterInterceptor
+            name: cel
+      name: gerrit-code-review-trigger-quarkus-api-demo
+      template:
+        ref: gerrit-code-review-triggertemplate
+    - bindings:
+        - kind: TriggerBinding
+          ref: code-review-quarkus-oracle-apps-triggerbinding
+      interceptors:
+        - params:
+            - name: filter
+              value: |
+                body.refName == 'refs/heads/dev' && body.project.name == 'dinafi-micro/quarkus-oracle-app'
+          ref:
+            kind: ClusterInterceptor
+            name: cel
+      name: code-review-trigger-quarkus-oracle-app
+      template:
+        ref: code-review-quarkus-oracle-apps-template
