@@ -20,7 +20,4 @@ spec:
           workspace: mdos
   workspaces:
     - name: mdos
-      optional: false
-  params: []
-  finally: []
 
