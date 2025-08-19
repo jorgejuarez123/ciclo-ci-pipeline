@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: code-review-quarkus-oracle-apps
+  name: code-review-quarkus-oracle-apps-triggerbinding
 spec:
   params:
     - name: git-source-url

@@ -1,0 +1,51 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: code-review-quarkus-oracle-apps-template
+spec:
+  params:
+    - name: git-source-url
+    - name: remote-image-url
+    - name: ref
+    - name: revision
+    - name: change-id
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: code-review-pipelinerun-
+      spec:
+        params:
+          - name: git-source-url
+            value: $(tt.params.git-source-url)
+          - name: remote-image-url
+            value: $(tt.params.remote-image-url)
+          - name: ref
+            value: $(tt.params.ref)
+          - name: revision
+            value: $(tt.params.revision)
+          - name: change-id
+            value: $(tt.params.change-id)
+        pipelineRef:
+          name: code-review-pipeline
+        serviceAccountName: pipeline
+        workspaces:
+          - name: app-source
+            persistentVolumeClaim:
+              claimName: pvc-source
+          - configMap:
+              name: maven-settings
+            name: maven-settings
+          - name: basic-oauth-gerrit
+            secret:
+              secretName: git-basic-auth
+          - name: sonar-secret
+            secret:
+              secretName: quarkus-oracle-app-sonar
+          - name: maven-repo
+            persistentVolumeClaim:
+              claimName: maven-mdos
+          - name: git-ssh-credentials
+            secret:
+              secretName: git-ssh-credentials
+
