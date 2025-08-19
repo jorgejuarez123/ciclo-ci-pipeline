@@ -2,7 +2,6 @@ apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: code-review-pipeline
-  namespace: mh-dev-dinafi-usi-cicloci
 spec:
   finally:
     - name: validate-pipeline

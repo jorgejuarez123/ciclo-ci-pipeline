@@ -2,7 +2,6 @@ apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: ci-pipeline
-  namespace: mh-dev-dinafi-usi-cicloci
 spec:
   params:
     - description: URL gerrit
