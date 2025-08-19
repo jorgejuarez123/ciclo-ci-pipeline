@@ -7,8 +7,13 @@ spec:
   tasks:
     - name: clean-mdos
       taskRef:
-        kind: Task
-        name: clean-mdos
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: clean-mdos
+          - name: namespace
+            value: openshift-pipelines
       workspaces:
         - name: maven-repo
           workspace: mdos
