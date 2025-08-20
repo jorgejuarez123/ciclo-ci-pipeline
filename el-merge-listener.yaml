@@ -1,0 +1,21 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: el-merge-listener
+  namespace: mh-dev-dinafi-usi-cicloci
+  labels:
+    app.kubernetes.io/instance: dinafi-usi-cicloci
+    app.kubernetes.io/managed-by: EventListener
+    app.kubernetes.io/part-of: Triggers
+    eventlistener: merge-listener
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  host: el-merge-listener-mh-dev-dinafi-usi-cicloci.apps.gcp-op-desa.cloud.mh.gob.sv
+  to:
+    kind: Service
+    name: el-merge-listener
+    weight: 100
+  port:
+    targetPort: http-listener
+  wildcardPolicy: None
