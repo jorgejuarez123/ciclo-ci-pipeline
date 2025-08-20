@@ -1,11 +1,10 @@
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: code-review-quarkus-oracle-apps-template
+  name: cr-quarkus-oracle-apps-tt
 spec:
   params:
     - name: git-source-url
-    - name: remote-image-url
     - name: ref
     - name: revision
     - name: change-id
@@ -18,8 +17,6 @@ spec:
         params:
           - name: git-source-url
             value: $(tt.params.git-source-url)
-          - name: remote-image-url
-            value: $(tt.params.remote-image-url)
           - name: ref
             value: $(tt.params.ref)
           - name: revision

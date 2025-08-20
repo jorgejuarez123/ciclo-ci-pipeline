@@ -1,19 +1,23 @@
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: gerrit-code-review-triggertemplate
+  name: ci-quarkus-oracle-apps-tt
 spec:
   params:
     - name: git-source-url
     - name: remote-image-url
     - name: ref
-    - name: revision
     - name: change-id
+    - name: revision
+    - name: hashtag
+    - name: gerrit-repository
+    - name: git-config-url
+    - name: nexus-repository
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: code-review-pipelinerun-
+        generateName: ci-pipelinerun-
       spec:
         params:
           - name: git-source-url
@@ -22,12 +26,18 @@ spec:
             value: $(tt.params.remote-image-url)
           - name: ref
             value: $(tt.params.ref)
-          - name: revision
-            value: $(tt.params.revision)
           - name: change-id
             value: $(tt.params.change-id)
+          - name: revision
+            value: $(tt.params.revision)
+          - name: hashtag
+            value: $(tt.params.hashtag)
+          - name: gerrit-repository
+            value: $(tt.params.gerrit-repository)
+          - name: nexus-repository
+            value: $(tt.params.nexus-repository)
         pipelineRef:
-          name: code-review-pipeline
+          name: ci-pipeline
         serviceAccountName: pipeline
         workspaces:
           - name: app-source
@@ -36,12 +46,9 @@ spec:
           - configMap:
               name: maven-settings
             name: maven-settings
-          - name: basic-oauth-gerrit
+          - name: maven-nexus
             secret:
-              secretName: git-basic-auth
-          - name: sonar-secret
-            secret:
-              secretName: quarkus-api-demo-sonar
+              secretName: maven-settings
           - name: maven-repo
             persistentVolumeClaim:
               claimName: maven-mdos

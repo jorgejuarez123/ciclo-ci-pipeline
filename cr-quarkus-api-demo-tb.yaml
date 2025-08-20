@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: gerrit-code-review-triggerbinding
+  name: cr-quarkus-api-demo-tb
 spec:
   params:
     - name: git-source-url

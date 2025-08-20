@@ -9,7 +9,7 @@ spec:
   triggers:
     - bindings:
         - kind: TriggerBinding
-          ref: gerrit-merge-triggerbinding
+          ref: ci-quarkus-api-demo-tb
       interceptors:
         - params:
             - name: filter
@@ -22,8 +22,8 @@ spec:
           ref:
             kind: ClusterInterceptor
             name: cel
-      name: gerrit-merge-trigger-quarkus-api-demo
+      name: ci-quarkus-api-demo
       template:
-        ref: gerrit-merge-triggertemplate
+        ref: ci-quarkus-api-demo-tt
 
 

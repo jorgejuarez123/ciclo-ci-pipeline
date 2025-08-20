@@ -9,7 +9,7 @@ spec:
   triggers:
     - bindings:
         - kind: TriggerBinding
-          ref: gerrit-code-review-triggerbinding
+          ref: cr-quarkus-api-demo-tb
       interceptors:
         - params:
             - name: filter
@@ -18,12 +18,12 @@ spec:
           ref:
             kind: ClusterInterceptor
             name: cel
-      name: gerrit-code-review-trigger-quarkus-api-demo
+      name: cr-quarkus-api-demo
       template:
-        ref: gerrit-code-review-triggertemplate
+        ref: cr-quarkus-api-demo-tt
     - bindings:
         - kind: TriggerBinding
-          ref: code-review-quarkus-oracle-apps-triggerbinding
+          ref: cr-quarkus-oracle-apps-tb
       interceptors:
         - params:
             - name: filter
@@ -32,6 +32,6 @@ spec:
           ref:
             kind: ClusterInterceptor
             name: cel
-      name: code-review-trigger-quarkus-oracle-app
+      name: cr-quarkus-oracle-apps
       template:
-        ref: code-review-quarkus-oracle-apps-template
+        ref: cr-quarkus-oracle-apps-tt

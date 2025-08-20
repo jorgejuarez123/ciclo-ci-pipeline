@@ -1,0 +1,23 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: ci-quarkus-api-demo-tb
+spec:
+  params:
+    - name: git-source-url
+      value: 'ssh://tekton.micro@almsrv2.mh.gob.sv:29419/$(body.change.project)'
+    - name: remote-image-url
+      value: quay-registry-quay-quay-enterprise.apps.gcp-op-desa.cloud.mh.gob.sv/mh-$(body.change.project)
+    - name: ref
+      value: $(body.patchSet.ref)
+    - name: revision
+      value: $(body.patchSet.revision)
+    - name: change-id
+      value: $(body.change.id)
+    - name: hashtag
+      value: $(extensions.hashtag)
+    - name: gerrit-repository
+      value: $(body.change.project)
+    - name: nexus-repository
+      value: 'http://alcm.mh.gob.sv/e/nexus/repository/Test-deployment-release/'
+
