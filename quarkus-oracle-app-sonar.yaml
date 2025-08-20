@@ -1,0 +1,11 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: quarkus-oracle-app-sonar
+  namespace: mh-dev-dinafi-usi-cicloci
+data:
+  SONAR_PROJECT_KEY: cXVhcmt1cy1vcmFjbGUtYXBw
+  SONAR_PROJECT_NAME: cXVhcmt1cy1vcmFjbGUtYXBw
+  SONAR_PROJECT_TOKEN: c3F1XzQ0NzU4ZWRkNzMwMjc1MmE1NmIzNTBlMWEwYzczOWVkNTE0MDY2MjI=
+type: Opaque
+

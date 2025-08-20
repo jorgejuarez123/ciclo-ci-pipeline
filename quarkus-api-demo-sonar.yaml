@@ -1,0 +1,11 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: quarkus-api-demo-sonar
+  namespace: mh-dev-dinafi-usi-cicloci
+data:
+  SONAR_PROJECT_KEY: ZHVtbXk=
+  SONAR_PROJECT_NAME: ZHVtbXk=
+  SONAR_PROJECT_TOKEN: c3F1XzRiZWRmM2FkNmM1NmViZTQ2MGFlMTk2OTk1YzUxMGRiNmE1YjgyZTU=
+type: Opaque
+
