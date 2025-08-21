@@ -31,9 +31,6 @@ spec:
     - description: URL gerrit
       name: git-source-url
       type: string
-    - description: URL Imagen
-      name: remote-image-url
-      type: string
     - description: Referencia gerrit
       name: ref
       type: string

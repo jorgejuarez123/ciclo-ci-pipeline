@@ -23,7 +23,7 @@ spec:
         ref: cr-quarkus-api-demo-tt
     - bindings:
         - kind: TriggerBinding
-          ref: cr-quarkus-oracle-apps-tb
+          ref: cr-quarkus-oracle-app-tb
       interceptors:
         - params:
             - name: filter
@@ -32,6 +32,6 @@ spec:
           ref:
             kind: ClusterInterceptor
             name: cel
-      name: cr-quarkus-oracle-apps
+      name: cr-quarkus-oracle-app
       template:
-        ref: cr-quarkus-oracle-apps-tt
+        ref: cr-quarkus-oracle-app-tt

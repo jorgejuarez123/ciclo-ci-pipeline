@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: cr-quarkus-oracle-apps-tt
+  name: cr-quarkus-oracle-app-tt
 spec:
   params:
     - name: git-source-url
