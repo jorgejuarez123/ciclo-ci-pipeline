@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: ssh://tekton.micro@almsrv2.mh.gob.sv:29419/dinafi-microservicio/tekton
-    targetRevision: master
+    repoURL: https://github.com/jorgejuarez123/ciclo-ci-pipeline.git 
+    targetRevision: main
     path: cr-java-pipeline
   destination:
     server: https://kubernetes.default.svc
