@@ -4,7 +4,7 @@ metadata:
   name: cr-java-pipeline
   namespace: argocd
 spec:
-  project: default
+  project: mh-dev-dinafi-usi-cicloci
   source:
     repoURL: https://github.com/jorgejuarez123/ciclo-ci-pipeline.git 
     targetRevision: main
