@@ -17,7 +17,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: ci-pipelinerun-
+        generateName: ci-java-pipelinerun-
       spec:
         params:
           - name: git-source-url
@@ -37,7 +37,7 @@ spec:
           - name: nexus-repository
             value: $(tt.params.nexus-repository)
         pipelineRef:
-          name: ci-pipeline
+          name: ci-java-pipeline
         serviceAccountName: pipeline
         workspaces:
           - name: app-source
