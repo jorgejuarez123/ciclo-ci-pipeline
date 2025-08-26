@@ -2,7 +2,6 @@ resources:
   - ci-java-pipeline.yaml
   - el-merge-listener.yaml
   - merge-listener.yaml
-  - secrets/
   - trigger-binding/
   - trigger-template/
 
