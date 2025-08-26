@@ -2,7 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: cr-java-pipeline
-  namespace: argocd
 spec:
   project: mh-dev-dinafi-usi-cicloci
   source:
