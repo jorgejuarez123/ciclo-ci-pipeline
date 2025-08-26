@@ -15,4 +15,4 @@ resources:
   - cr-java-pipeline/trigger-binding/DINAFI-USI/cr-quarkus-oracle-app-tb.yaml
   - cr-java-pipeline/trigger-template/DINAFI-USI/cr-quarkus-api-demo-tt.yaml
   - cr-java-pipeline/trigger-template/DINAFI-USI/cr-quarkus-oracle-app-tt.yaml
-  - limpiar-mdos-pipeline/limpiar-mdos.yaml
+  - limpiar-mdos-pipeline/limpiar-mdos-pipeline.yaml
