@@ -1,5 +1,18 @@
 resources:
-  - ci-java-pipeline/
-  - cr-java-pipeline/
-  - limpiar-mdos-pipeline/
-
+  - ci-java-pipeline/ci-java-pipeline.yaml
+  - ci-java-pipeline/el-merge-listener.yaml
+  - ci-java-pipeline/merge-listener.yaml
+  - ci-java-pipeline/trigger-binding/DINAFI-USI/ci-quarkus-api-demo-tb.yaml
+  - ci-java-pipeline/trigger-binding/DINAFI-USI/ci-quarkus-oracle-app-tb.yaml
+  - ci-java-pipeline/trigger-template/DINAFI-USI/ci-quarkus-api-demo-tt.yaml
+  - ci-java-pipeline/trigger-template/DINAFI-USI/ci-quarkus-oracle-app-tt.yaml
+  - cr-java-pipeline/code-review-listener.yaml
+  - cr-java-pipeline/cr-java-pipeline.yaml
+  - cr-java-pipeline/el-code-review-listener.yaml
+  - cr-java-pipeline/secrets/DINAFI-USI/quarkus-api-demo-sonar.yaml
+  - cr-java-pipeline/secrets/DINAFI-USI/quarkus-oracle-app-sonar.yaml
+  - cr-java-pipeline/trigger-binding/DINAFI-USI/cr-quarkus-api-demo-tb.yaml
+  - cr-java-pipeline/trigger-binding/DINAFI-USI/cr-quarkus-oracle-app-tb.yaml
+  - cr-java-pipeline/trigger-template/DINAFI-USI/cr-quarkus-api-demo-tt.yaml
+  - cr-java-pipeline/trigger-template/DINAFI-USI/cr-quarkus-oracle-app-tt.yaml
+  - limpiar-mdos-pipeline/limpiar-mdos.yaml
