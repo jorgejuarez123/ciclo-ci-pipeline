@@ -1,0 +1,8 @@
+resources:
+  - ci-java-pipeline.yaml
+  - el-merge-listener.yaml
+  - merge-listener.yaml
+  - trigger-binding/DINAFI-USI/ci-quarkus-api-demo-tb.yaml
+  - trigger-binding/DINAFI-USI/ci-quarkus-oracle-app-tb.yaml
+  - trigger-template/DINAFI-USI/ci-quarkus-api-demo-tt.yaml
+  - trigger-template/DINAFI-USI/ci-quarkus-oracle-app-tt.yaml

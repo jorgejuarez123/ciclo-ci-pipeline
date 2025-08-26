@@ -1,8 +1,10 @@
 resources:
-  - cr-java-pipeline.yaml
   - code-review-listener.yaml
+  - cr-java-pipeline.yaml
   - el-code-review-listener.yaml
-  - secrets/
-  - trigger-binding/
-  - trigger-template/
-
+  - secrets/DINAFI-USI/quarkus-api-demo-sonar.yaml
+  - secrets/DINAFI-USI/quarkus-oracle-app-sonar.yaml
+  - trigger-binding/DINAFI-USI/cr-quarkus-api-demo-tb.yaml
+  - trigger-binding/DINAFI-USI/cr-quarkus-oracle-app-tb.yaml
+  - trigger-template/DINAFI-USI/cr-quarkus-api-demo-tt.yaml
+  - trigger-template/DINAFI-USI/cr-quarkus-oracle-app-tt.yaml
