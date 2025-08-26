@@ -3,14 +3,15 @@ kind: Application
 metadata:
   name: ci-java-pipeline
 spec:
-  project: mh-dev-dinafi-usi-cicloci
+  destination:
+    namespace: mh-dev-dinafi-usi-cicloci
+    server: https://kubernetes.default.svc
   source:
+    path: ci-java-pipeline
     repoURL: https://github.com/jorgejuarez123/ciclo-ci-pipeline.git
     targetRevision: main
-    path: ci-java-pipeline
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: mh-dev-dinafi-usi-cicloci
+  sources: []
+  project: mh-dev-dinafi-usi-cicloci
   syncPolicy:
     automated:
       prune: true

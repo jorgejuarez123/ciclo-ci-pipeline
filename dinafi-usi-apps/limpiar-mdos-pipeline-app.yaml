@@ -3,15 +3,17 @@ kind: Application
 metadata:
   name: limpiar-mdos-pipeline
 spec:
-  project: mh-dev-dinafi-usi-cicloci
+  destination:
+    namespace: mh-dev-dinafi-usi-cicloci
+    server: https://kubernetes.default.svc
   source:
+    path: limpiar-mdos-pipeline
     repoURL: https://github.com/jorgejuarez123/ciclo-ci-pipeline.git
     targetRevision: main
-    path: limpiar-mdos-pipeline
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: mh-dev-dinafi-usi-cicloci
+  sources: []
+  project: mh-dev-dinafi-usi-cicloci
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+
