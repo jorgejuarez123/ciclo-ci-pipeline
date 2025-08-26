@@ -1,0 +1,4 @@
+resources:
+  - dinafi-usi-apps/ci-java-pipeline-app.yaml
+  - dinafi-usi-apps/cr-java-pipeline-app.yaml
+  - dinafi-usi-apps/limpiar-mdos-pipeline-app.yaml
