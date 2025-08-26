@@ -2,6 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: limpiar-mdos-pipeline
+  namespace: openshift-gitops
 spec:
   destination:
     namespace: mh-dev-dinafi-usi-cicloci
