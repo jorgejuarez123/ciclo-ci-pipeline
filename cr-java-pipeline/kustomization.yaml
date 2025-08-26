@@ -1,0 +1,8 @@
+resources:
+  - cr-java-pipeline.yaml
+  - code-review-listener.yaml
+  - el-code-review-listener.yaml
+  - secrets/
+  - trigger-binding/
+  - trigger-template/
+

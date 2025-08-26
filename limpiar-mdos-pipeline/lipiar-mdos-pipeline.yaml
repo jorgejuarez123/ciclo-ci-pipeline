@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
-  name: limpiar-mdos
+  name: lipiar-mdos-pipeline
 spec:
   tasks:
     - name: clean-mdos

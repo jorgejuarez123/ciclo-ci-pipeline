@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
-  name: code-review-pipeline
+  name: cr-java-pipeline
 spec:
   finally:
     - name: validate-pipeline

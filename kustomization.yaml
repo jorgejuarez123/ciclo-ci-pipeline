@@ -1,0 +1,5 @@
+resources:
+  - ci-java-pipeline/
+  - cr-java-pipeline/
+  - limpiar-mdos-pipeline/
+
