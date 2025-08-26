@@ -10,7 +10,6 @@ spec:
     path: ci-java-pipeline
     repoURL: https://github.com/jorgejuarez123/ciclo-ci-pipeline.git
     targetRevision: main
-  sources: []
   project: mh-dev-dinafi-usi-cicloci
   syncPolicy:
     automated:
